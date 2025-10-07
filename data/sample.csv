@@ -1,0 +1,4 @@
+meter_id,date,reading,unit,notes
+A-101,2025-09-01,1287,m3,Monthly check
+A-101,2025-10-01,1312,m3,OK
+B-009,2025-10-01,875,m3,Suspected leak
