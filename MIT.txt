@@ -1,7 +1,0 @@
-
----
-
-### 🧩 `index.html` — Your Full Artifact
-
-You already have this — just save the full code you built into a file named:
-
