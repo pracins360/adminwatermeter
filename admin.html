@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Watermeter · Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-900">
+  <header class="py-6 bg-gradient-to-br from-indigo-200 via-white to-sky-200">
+    <div class="max-w-5xl mx-auto px-4 flex items-center justify-between gap-4">
+      <span class="text-xl font-extrabold">Admin Panel</span>
+      <a href="index.html" class="px-3 py-2 text-sm rounded-lg bg-white/70 hover:bg-white">← Back</a>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 py-8 space-y-8">
+    <section class="p-6 rounded-2xl bg-white shadow ring-1 ring-slate-200">
+      <h2 class="text-xl font-bold">Business info</h2>
+      <div class="grid md:grid-cols-3 gap-4 mt-4">
+        <input id="bizName" placeholder="Company name" class="px-3 py-2 rounded-lg ring-1 ring-slate-300" />
+        <input id="bizPhone" placeholder="Phone" class="px-3 py-2 rounded-lg ring-1 ring-slate-300" />
+        <input id="bizAddr" placeholder="Address" class="px-3 py-2 rounded-lg ring-1 ring-slate-300" />
+      </div>
+      <div class="mt-4 flex gap-3">
+        <button id="saveBiz" class="px-4 py-2 rounded-lg bg-sky-600 text-white hover:bg-sky-700">Save</button>
+        <button id="clearBiz" class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200">Clear</button>
+      </div>
+    </section>
+
+    <section class="p-6 rounded-2xl bg-white shadow ring-1 ring-slate-200">
+      <h2 class="text-xl font-bold">Notes</h2>
+      <textarea id="notes" rows="6" class="mt-3 w-full px-3 py-2 rounded-lg ring-1 ring-slate-300" placeholder="Notes..."></textarea>
+      <div class="mt-3 flex gap-3">
+        <button id="saveNotes" class="px-4 py-2 rounded-lg bg-sky-600 text-white hover:bg-sky-700">Save</button>
+        <button id="clearNotes" class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200">Clear</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const n=document.getElementById('notes'),bN=document.getElementById('bizName'),bP=document.getElementById('bizPhone'),bA=document.getElementById('bizAddr');
+    function load(){bN.value=localStorage.getItem('bizName')||'';bP.value=localStorage.getItem('bizPhone')||'';bA.value=localStorage.getItem('bizAddr')||'';n.value=localStorage.getItem('notes')||'';}
+    load();
+    document.getElementById('saveBiz').onclick=()=>{localStorage.setItem('bizName',bN.value);localStorage.setItem('bizPhone',bP.value);localStorage.setItem('bizAddr',bA.value);alert('Saved');};
+    document.getElementById('clearBiz').onclick=()=>{localStorage.removeItem('bizName');localStorage.removeItem('bizPhone');localStorage.removeItem('bizAddr');load();};
+    document.getElementById('saveNotes').onclick=()=>{localStorage.setItem('notes',n.value);alert('Notes saved');};
+    document.getElementById('clearNotes').onclick=()=>{localStorage.removeItem('notes');load();};
+  </script>
+</body>
+</html>
