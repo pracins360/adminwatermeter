@@ -3,271 +3,408 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Water Meter Monitor</title>
+  <title>Bo Meter di Awa</title>
   <style>
     :root{
-      --bg:#f5f7fb;
+      --bg:#eef1f6;
       --card:#ffffff;
-      --text:#1f2937;
-      --muted:#6b7280;
-      --primary:#2563eb;
-      --primary-dark:#1d4ed8;
-      --border:#e5e7eb;
-      --light:#eef2ff;
-      --danger:#dc2626;
-      --warn:#d97706;
-      --success:#16a34a;
-      --dark:#111827;
+      --text:#0f2748;
+      --muted:#66758a;
+      --border:#d8dee8;
+      --primary:#3167e3;
+      --primary-dark:#244fb8;
+      --soft:#eef3ff;
+      --green:#18a957;
+      --orange:#e28a1a;
+      --red:#d63b3b;
     }
+
     *{box-sizing:border-box}
+
     body{
       margin:0;
-      padding:18px;
-      font-family:Arial, sans-serif;
       background:var(--bg);
+      font-family:Arial, sans-serif;
       color:var(--text);
+      padding:16px;
     }
+
     .wrap{
-      max-width:860px;
+      max-width:1100px;
       margin:0 auto;
     }
+
     .card{
       background:var(--card);
-      border-radius:18px;
-      padding:22px;
-      box-shadow:0 10px 24px rgba(0,0,0,.08);
-      margin-bottom:16px;
+      border-radius:28px;
+      padding:28px;
+      margin-bottom:20px;
+      box-shadow:0 0 0 1px rgba(0,0,0,.03);
     }
-    h1,h2,h3,h4{margin-top:0}
-    h1,h2{text-align:center}
-    p{line-height:1.5}
-    .muted{color:var(--muted)}
-    .small{font-size:13px}
-    .tiny{font-size:12px}
-    .center{text-align:center}
-    .row{
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
+
+    h1,h2,h3{
+      margin:0 0 14px 0;
+      text-align:center;
+      color:var(--text);
     }
-    .row > *{
-      flex:1 1 220px;
+
+    h1{
+      font-size:42px;
+      font-weight:700;
     }
-    label{
-      display:block;
-      font-size:13px;
-      margin-bottom:6px;
+
+    h2{
+      font-size:32px;
+      font-weight:700;
+    }
+
+    .sub{
+      text-align:center;
       color:var(--muted);
+      font-size:16px;
+      margin-bottom:20px;
     }
+
+    .pill{
+      margin:0 auto;
+      display:inline-block;
+      padding:14px 18px;
+      border-radius:999px;
+      background:var(--soft);
+      border:1px solid #bfd0ff;
+      font-weight:700;
+      color:var(--text);
+    }
+
+    .center{
+      text-align:center;
+    }
+
+    .grid-3{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:16px;
+    }
+
+    .label{
+      display:block;
+      margin-bottom:8px;
+      color:var(--muted);
+      font-size:14px;
+    }
+
     input, select{
       width:100%;
-      padding:13px;
-      border:1px solid #d1d5db;
-      border-radius:12px;
-      font-size:15px;
+      height:56px;
+      border-radius:16px;
+      border:1px solid #cfd7e5;
+      padding:0 16px;
+      font-size:16px;
       background:#fff;
     }
-    button{
-      width:100%;
-      padding:14px 16px;
-      border:none;
-      border-radius:12px;
-      cursor:pointer;
-      font-size:15px;
-      margin-top:10px;
-    }
-    .btn-primary{background:var(--primary); color:#fff}
-    .btn-primary:hover{background:var(--primary-dark)}
-    .btn-secondary{background:var(--dark); color:#fff}
-    .btn-light{background:#f3f4f6; color:var(--dark); border:1px solid var(--border)}
-    .btn-outline{background:var(--light); color:var(--dark); border:1px solid #c7d2fe}
+
     .meter-card{
       border:1px solid var(--border);
-      border-radius:14px;
-      padding:14px;
-      background:#fcfcfc;
-      margin-top:12px;
+      border-radius:20px;
+      padding:18px;
+      margin-top:16px;
+      background:#fbfcff;
     }
+
+    .meter-title{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:12px;
+      font-weight:700;
+      font-size:20px;
+    }
+
+    .grid-4{
+      display:grid;
+      grid-template-columns:1.2fr 1fr 1fr 1fr;
+      gap:14px;
+    }
+
+    .usage-box{
+      height:56px;
+      border-radius:16px;
+      border:1px solid #cfd7e5;
+      background:#f4f7fb;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 16px;
+      font-size:16px;
+      font-weight:700;
+    }
+
     .status{
       display:flex;
       align-items:center;
       gap:8px;
-      font-weight:bold;
+      font-size:14px;
+      color:var(--muted);
+      margin-top:12px;
     }
+
     .dot{
       width:12px;
       height:12px;
       border-radius:50%;
       display:inline-block;
     }
-    .dot.green{background:var(--success)}
-    .dot.orange{background:var(--warn)}
-    .dot.red{background:var(--danger)}
-    .usage{
-      font-size:28px;
-      font-weight:bold;
-      margin:8px 0 4px 0;
-    }
-    .summary-grid{
+
+    .green{ background:var(--green); }
+    .orange{ background:var(--orange); }
+    .red{ background:var(--red); }
+
+    .actions{
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-      gap:12px;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      margin-top:18px;
     }
-    .summary-box{
-      border:1px solid var(--border);
-      border-radius:14px;
-      padding:14px;
-      background:#fafafa;
+
+    button{
+      height:60px;
+      border:none;
+      border-radius:18px;
+      font-size:18px;
+      cursor:pointer;
     }
-    .big{
-      font-size:34px;
-      font-weight:bold;
-      text-align:center;
-      margin:8px 0;
-    }
-    .slot-badge{
-      display:inline-block;
-      padding:7px 12px;
-      border-radius:999px;
+
+    .btn-light{
       background:#eef2ff;
-      border:1px solid #c7d2fe;
-      font-size:13px;
-      font-weight:bold;
+      color:var(--text);
+      border:1px solid #bfd0ff;
     }
-    .hidden{display:none}
-    .lock{
-      border:2px dashed #fca5a5;
-      background:#fff7f7;
+
+    .btn-primary{
+      background:var(--primary);
+      color:#fff;
     }
-    .pricing{
+
+    .btn-primary:hover{
+      background:var(--primary-dark);
+    }
+
+    .summary{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+    }
+
+    .summary-card{
       border:1px solid var(--border);
-      border-radius:14px;
-      padding:14px;
-      background:#fafafa;
+      border-radius:18px;
+      padding:16px;
+      background:#fbfcff;
+      text-align:center;
     }
-    ul{
-      margin:8px 0 0 18px;
-      padding:0;
+
+    .summary-card .big{
+      font-size:28px;
+      font-weight:700;
+      margin-top:6px;
     }
-    .footer-note{
+
+    .upgrade-note{
+      margin-top:14px;
       text-align:center;
       color:var(--muted);
-      font-size:13px;
-      margin-top:6px;
+      font-size:14px;
+    }
+
+    .warn{
+      color:var(--red);
+      font-weight:700;
+    }
+
+    @media (max-width: 900px){
+      .grid-3, .grid-4, .summary, .actions{
+        grid-template-columns:1fr;
+      }
+
+      h1{font-size:34px}
+      h2{font-size:28px}
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-
     <div class="card">
       <h1>Bo Meter di Awa</h1>
-      <p class="center muted">Basic version supports up to 3 meters per address.</p>
-      <p class="center"><span class="slot-badge">Closed Group • Max 500 users per country</span></p>
+      <div class="sub">Basic version supports up to 3 meters per address.</div>
+      <div class="center">
+        <div class="pill">Closed Group • Max 500 users per country</div>
+      </div>
     </div>
 
-    <div id="lockCard" class="card lock hidden">
-      <h2>Access Closed</h2>
-      <p class="center">Your annual access is not active.</p>
-      <p class="center muted">Payment is handled separately. Once paid, the app opens.</p>
-      <button class="btn-primary" onclick="contactSupport()">Contact Support</button>
+    <div class="card">
+      <h2>Property Info</h2>
+      <div class="grid-3">
+        <div>
+          <label class="label">Country</label>
+          <select id="country">
+            <option>Curaçao</option>
+            <option>Aruba</option>
+            <option>Bonaire</option>
+          </select>
+        </div>
+        <div>
+          <label class="label">Address</label>
+          <input id="address" type="text" value="z choloma 41" />
+        </div>
+        <div>
+          <label class="label">Owner / Property Name</label>
+          <input id="owner" type="text" value="Purcy" />
+        </div>
+      </div>
     </div>
 
-    <div id="appContent">
-      <div class="card">
-        <h2>Property Info</h2>
-        <div class="row">
-          <div>
-            <label>Country</label>
-            <select id="country">
-              <option value="Curacao">Curaçao</option>
-              <option value="Aruba">Aruba</option>
-              <option value="Bonaire">Bonaire</option>
-            </select>
-          </div>
-          <div>
-            <label>Address</label>
-            <input id="address" placeholder="Example: Kaya Example 12">
-          </div>
-          <div>
-            <label>Owner / Property Name</label>
-            <input id="owner" placeholder="Example: Maria / Property A">
-          </div>
+    <div class="card">
+      <h2>Meters</h2>
+      <div class="sub">Add 1 to 3 meters in basic. More than 3 = upgrade.</div>
+
+      <div id="metersContainer"></div>
+
+      <div class="actions">
+        <button class="btn-light" onclick="addMeter()">+ Add Meter</button>
+        <button class="btn-primary" onclick="calculateAll()">Calculate Usage</button>
+      </div>
+
+      <div class="summary">
+        <div class="summary-card">
+          <div>Total Meters</div>
+          <div class="big" id="totalMeters">1</div>
+        </div>
+        <div class="summary-card">
+          <div>Total Usage (m³)</div>
+          <div class="big" id="totalUsage">0</div>
+        </div>
+        <div class="summary-card">
+          <div>Property Status</div>
+          <div class="big" id="propertyStatus">🟢</div>
         </div>
       </div>
 
-      <div class="card">
-        <h2>Meters</h2>
-        <p class="center muted small">Add 1 to 3 meters in basic. More than 3 = upgrade.</p>
+      <div class="upgrade-note" id="upgradeNote"></div>
+    </div>
+  </div>
 
-        <div id="metersContainer"></div>
+  <script>
+    let meterCount = 0;
+    const maxBasicMeters = 3;
 
-        <div class="row">
-          <button class="btn-outline" onclick="addMeter()">+ Add Meter</button>
-          <button class="btn-primary" onclick="calculateAll()">Calculate Usage</button>
-        </div>
-      </div>
-
-      <div id="resultsCard" class="card hidden">
-        <h2>Result Overview</h2>
-
-        <div class="summary-grid">
-          <div class="summary-box">
-            <div class="muted small">Country</div>
-            <div id="sumCountry"><b>-</b></div>
+    function meterTemplate(index) {
+      return `
+        <div class="meter-card" id="meterCard${index}">
+          <div class="meter-title">
+            <span>Meter ${index}</span>
+            <span id="meterBadge${index}">🟢</span>
           </div>
-          <div class="summary-box">
-            <div class="muted small">Address</div>
-            <div id="sumAddress"><b>-</b></div>
+
+          <div class="grid-4">
+            <div>
+              <label class="label">Meter Number</label>
+              <input type="text" id="meterNo${index}" placeholder="Meter number" />
+            </div>
+
+            <div>
+              <label class="label">Last Month Meter</label>
+              <input type="number" id="lastMeter${index}" placeholder="Last month" />
+            </div>
+
+            <div>
+              <label class="label">Today's Meter</label>
+              <input type="number" id="todayMeter${index}" placeholder="Today" />
+            </div>
+
+            <div>
+              <label class="label">Usage (m³)</label>
+              <div class="usage-box">
+                <span id="usage${index}">0</span>
+                <span>m³</span>
+              </div>
+            </div>
           </div>
-          <div class="summary-box">
-            <div class="muted small">Property Status</div>
-            <div id="propertyStatus"><b>-</b></div>
-          </div>
-          <div class="summary-box">
-            <div class="muted small">Total Usage</div>
-            <div id="totalUsage" class="big">0 m³</div>
+
+          <div class="status" id="statusText${index}">
+            <span class="dot green" id="statusDot${index}"></span>
+            <span>Normal usage</span>
           </div>
         </div>
+      `;
+    }
 
-        <div id="meterResults"></div>
+    function addMeter() {
+      if (meterCount >= maxBasicMeters) {
+        document.getElementById("upgradeNote").innerHTML =
+          `<span class="warn">Basic supports up to 3 meters only.</span> Upgrade for meter 4 and up.`;
+        return;
+      }
 
-        <div class="row">
-          <button class="btn-secondary" onclick="toggleDetails()">View Details</button>
-          <button class="btn-primary" onclick="showUpgrade()">Upgrade</button>
-        </div>
-      </div>
+      meterCount++;
+      document.getElementById("metersContainer").insertAdjacentHTML("beforeend", meterTemplate(meterCount));
+      document.getElementById("totalMeters").textContent = meterCount;
+      document.getElementById("upgradeNote").textContent = "";
+    }
 
-      <div id="detailsCard" class="card hidden">
-        <h2>Details</h2>
-        <p class="center muted">Basic details view for all active meters.</p>
-        <div id="detailsContent"></div>
-      </div>
+    function getStatusFromUsage(usage) {
+      if (usage <= 10) {
+        return { emoji: "🟢", cls: "green", text: "Normal usage" };
+      } else if (usage <= 25) {
+        return { emoji: "🟠", cls: "orange", text: "A bit unusual" };
+      } else {
+        return { emoji: "🔴", cls: "red", text: "Suspicious activity" };
+      }
+    }
 
-      <div id="upgradeCard" class="card hidden">
-        <h2>Upgrade Options</h2>
+    function calculateAll() {
+      let totalUsage = 0;
+      let propertyLevel = "green";
 
-        <div class="pricing">
-          <h3>Annual Access</h3>
-          <p><b>Basic:</b> $10 / year</p>
-          <ul>
-            <li>Up to 3 meters</li>
-            <li>Usage calculation</li>
-            <li>Status dots</li>
-            <li>Simple overview</li>
-          </ul>
-        </div>
+      for (let i = 1; i <= meterCount; i++) {
+        const last = parseFloat(document.getElementById(`lastMeter${i}`).value) || 0;
+        const today = parseFloat(document.getElementById(`todayMeter${i}`).value) || 0;
 
-        <div class="pricing" style="margin-top:12px;">
-          <h3>Upgrade</h3>
-          <p><b>Upgrade:</b> $40 / year</p>
-          <ul>
-            <li>More detailed monitoring</li>
-            <li>History / reports later</li>
-            <li>Extra features</li>
-            <li>Better suspicious activity review</li>
-          </ul>
-        </div>
+        let usage = today - last;
+        if (usage < 0) usage = 0;
 
-        <div class="pricing" style="margin-top:12px;">
-          <
+        document.getElementById(`usage${i}`).textContent = usage.toFixed(1).replace(".0", "");
+        totalUsage += usage;
+
+        const status = getStatusFromUsage(usage);
+        document.getElementById(`meterBadge${i}`).textContent = status.emoji;
+
+        const dot = document.getElementById(`statusDot${i}`);
+        dot.className = `dot ${status.cls}`;
+
+        document.getElementById(`statusText${i}`).innerHTML =
+          `<span class="dot ${status.cls}" id="statusDot${i}"></span><span>${status.text}</span>`;
+
+        if (status.cls === "red") {
+          propertyLevel = "red";
+        } else if (status.cls === "orange" && propertyLevel !== "red") {
+          propertyLevel = "orange";
+        }
+      }
+
+      document.getElementById("totalUsage").textContent = totalUsage.toFixed(1).replace(".0", "");
+
+      if (propertyLevel === "red") {
+        document.getElementById("propertyStatus").textContent = "🔴";
+      } else if (propertyLevel === "orange") {
+        document.getElementById("propertyStatus").textContent = "🟠";
+      } else {
+        document.getElementById("propertyStatus").textContent = "🟢";
+      }
+    }
+
+    // start with 1 meter visible
+    addMeter();
+  </script>
+</body>
+</html>
