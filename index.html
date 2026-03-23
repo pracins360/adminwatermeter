@@ -1,79 +1,273 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Admin Watermeter · CSV viewer</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Water Meter Monitor</title>
+  <style>
+    :root{
+      --bg:#f5f7fb;
+      --card:#ffffff;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --primary:#2563eb;
+      --primary-dark:#1d4ed8;
+      --border:#e5e7eb;
+      --light:#eef2ff;
+      --danger:#dc2626;
+      --warn:#d97706;
+      --success:#16a34a;
+      --dark:#111827;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      padding:18px;
+      font-family:Arial, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+    .wrap{
+      max-width:860px;
+      margin:0 auto;
+    }
+    .card{
+      background:var(--card);
+      border-radius:18px;
+      padding:22px;
+      box-shadow:0 10px 24px rgba(0,0,0,.08);
+      margin-bottom:16px;
+    }
+    h1,h2,h3,h4{margin-top:0}
+    h1,h2{text-align:center}
+    p{line-height:1.5}
+    .muted{color:var(--muted)}
+    .small{font-size:13px}
+    .tiny{font-size:12px}
+    .center{text-align:center}
+    .row{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .row > *{
+      flex:1 1 220px;
+    }
+    label{
+      display:block;
+      font-size:13px;
+      margin-bottom:6px;
+      color:var(--muted);
+    }
+    input, select{
+      width:100%;
+      padding:13px;
+      border:1px solid #d1d5db;
+      border-radius:12px;
+      font-size:15px;
+      background:#fff;
+    }
+    button{
+      width:100%;
+      padding:14px 16px;
+      border:none;
+      border-radius:12px;
+      cursor:pointer;
+      font-size:15px;
+      margin-top:10px;
+    }
+    .btn-primary{background:var(--primary); color:#fff}
+    .btn-primary:hover{background:var(--primary-dark)}
+    .btn-secondary{background:var(--dark); color:#fff}
+    .btn-light{background:#f3f4f6; color:var(--dark); border:1px solid var(--border)}
+    .btn-outline{background:var(--light); color:var(--dark); border:1px solid #c7d2fe}
+    .meter-card{
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:14px;
+      background:#fcfcfc;
+      margin-top:12px;
+    }
+    .status{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-weight:bold;
+    }
+    .dot{
+      width:12px;
+      height:12px;
+      border-radius:50%;
+      display:inline-block;
+    }
+    .dot.green{background:var(--success)}
+    .dot.orange{background:var(--warn)}
+    .dot.red{background:var(--danger)}
+    .usage{
+      font-size:28px;
+      font-weight:bold;
+      margin:8px 0 4px 0;
+    }
+    .summary-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:12px;
+    }
+    .summary-box{
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:14px;
+      background:#fafafa;
+    }
+    .big{
+      font-size:34px;
+      font-weight:bold;
+      text-align:center;
+      margin:8px 0;
+    }
+    .slot-badge{
+      display:inline-block;
+      padding:7px 12px;
+      border-radius:999px;
+      background:#eef2ff;
+      border:1px solid #c7d2fe;
+      font-size:13px;
+      font-weight:bold;
+    }
+    .hidden{display:none}
+    .lock{
+      border:2px dashed #fca5a5;
+      background:#fff7f7;
+    }
+    .pricing{
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:14px;
+      background:#fafafa;
+    }
+    ul{
+      margin:8px 0 0 18px;
+      padding:0;
+    }
+    .footer-note{
+      text-align:center;
+      color:var(--muted);
+      font-size:13px;
+      margin-top:6px;
+    }
+  </style>
 </head>
-<body class="bg-slate-50 text-slate-900">
-  <header class="py-6 bg-gradient-to-br from-sky-200 via-white to-indigo-200">
-  <div class="max-w-5xl mx-auto px-4 flex items-center justify-between gap-4">
-    <div class="flex items-center gap-3">
-      <img src="assets/logo_primary.jpg?v=3" alt="Logo" class="h-12 w-auto object-contain" />
-      <span class="text-xl font-extrabold">Admin Watermeter</span>
+<body>
+  <div class="wrap">
+
+    <div class="card">
+      <h1>Bo Meter di Awa</h1>
+      <p class="center muted">Basic version supports up to 3 meters per address.</p>
+      <p class="center"><span class="slot-badge">Closed Group • Max 500 users per country</span></p>
     </div>
-    <div class="flex items-center gap-3">
-      <img src="assets/logo_secondary.jpg?v=3" alt="Partner" class="h-8 w-auto object-contain opacity-80 hidden sm:block" />
-      <a href="admin.html" class="px-3 py-2 text-sm rounded-lg bg-white/70 hover:bg-white">Admin</a>
+
+    <div id="lockCard" class="card lock hidden">
+      <h2>Access Closed</h2>
+      <p class="center">Your annual access is not active.</p>
+      <p class="center muted">Payment is handled separately. Once paid, the app opens.</p>
+      <button class="btn-primary" onclick="contactSupport()">Contact Support</button>
     </div>
-  </div>
-</header>
 
-
-  <main class="max-w-5xl mx-auto px-4 py-8 space-y-8">
-    <section class="p-5 rounded-2xl bg-white shadow ring-1 ring-slate-200">
-      <h1 class="text-2xl font-bold">CSV Viewer</h1>
-      <p class="mt-1 text-sm opacity-80">Upload i wak bo CSV di watermeters. <span class="font-semibold">Sin backend</span>.</p>
-    </section>
-
-    <section class="grid md:grid-cols-2 gap-6">
-      <div class="p-6 rounded-2xl bg-white shadow ring-1 ring-slate-200">
-        <h2 class="text-xl font-bold">1) Upload CSV</h2>
-        <p class="mt-1 text-sm opacity-80">Formato rekomendá: <code>meter_id,date,reading,unit,notes</code></p>
-        <input id="fileInput" type="file" accept=".csv" class="mt-4 block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-sky-600 file:text-white hover:file:bg-sky-700"/>
-        <p id="status" class="mt-2 text-sm text-slate-500"></p>
-      </div>
-      <div class="p-6 rounded-2xl bg-white shadow ring-1 ring-slate-200">
-        <h2 class="text-xl font-bold">2) Sample data</h2>
-        <pre class="mt-3 p-3 bg-slate-100 rounded-lg text-xs overflow-x-auto">meter_id,date,reading,unit,notes
-A-101,2025-09-01,1287,m³,Monthly check
-A-101,2025-10-01,1312,m³,OK
-B-009,2025-10-01,875,m³,Suspected leak</pre>
-        <a href="data/sample.csv" class="inline-block mt-3 px-3 py-2 text-sm rounded-lg bg-slate-100 hover:bg-slate-200">Download sample.csv</a>
-      </div>
-    </section>
-
-    <section class="p-6 rounded-2xl bg-white shadow ring-1 ring-slate-200">
-      <div class="flex items-center justify-between">
-        <h2 class="text-xl font-bold">Preview</h2>
-        <div class="flex items-center gap-2">
-          <button id="exportBtn" class="px-3 py-2 text-sm rounded-lg bg-sky-600 text-white hover:bg-sky-700">Export</button>
-          <button id="clearBtn" class="px-3 py-2 text-sm rounded-lg bg-slate-100 hover:bg-slate-200">Clear</button>
+    <div id="appContent">
+      <div class="card">
+        <h2>Property Info</h2>
+        <div class="row">
+          <div>
+            <label>Country</label>
+            <select id="country">
+              <option value="Curacao">Curaçao</option>
+              <option value="Aruba">Aruba</option>
+              <option value="Bonaire">Bonaire</option>
+            </select>
+          </div>
+          <div>
+            <label>Address</label>
+            <input id="address" placeholder="Example: Kaya Example 12">
+          </div>
+          <div>
+            <label>Owner / Property Name</label>
+            <input id="owner" placeholder="Example: Maria / Property A">
+          </div>
         </div>
       </div>
-      <div id="tableWrap" class="mt-4 overflow-x-auto">
-        <table id="dataTable" class="min-w-full text-sm hidden">
-          <thead class="bg-slate-100"></thead>
-          <tbody></tbody>
-        </table>
+
+      <div class="card">
+        <h2>Meters</h2>
+        <p class="center muted small">Add 1 to 3 meters in basic. More than 3 = upgrade.</p>
+
+        <div id="metersContainer"></div>
+
+        <div class="row">
+          <button class="btn-outline" onclick="addMeter()">+ Add Meter</button>
+          <button class="btn-primary" onclick="calculateAll()">Calculate Usage</button>
+        </div>
       </div>
-    </section>
-  </main>
 
-  <footer class="py-8 text-center text-xs opacity-70">
-    © <span id="year"></span> Admin Watermeter
-  </footer>
+      <div id="resultsCard" class="card hidden">
+        <h2>Result Overview</h2>
 
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-    const fileInput=document.getElementById('fileInput'),status=document.getElementById('status');
-    const table=document.getElementById('dataTable'),thead=table.querySelector('thead'),tbody=table.querySelector('tbody');
-    function parseCSV(t){return t.replace(/\r\n?/g,'\n').split('\n').filter(l=>l.trim()!='').map(l=>l.split(','));}
-    function renderTable(r){if(!r||r.length==0)return;thead.innerHTML='';tbody.innerHTML='';const trh=document.createElement('tr');r[0].forEach(h=>{const th=document.createElement('th');th.className='px-3 py-2 text-left font-semibold';th.textContent=h;trh.appendChild(th);});thead.appendChild(trh);r.slice(1).forEach(rr=>{const tr=document.createElement('tr');tr.className='border-b';rr.forEach(v=>{const td=document.createElement('td');td.className='px-3 py-2';td.textContent=v;tr.appendChild(td);});tbody.appendChild(tr);});table.classList.remove('hidden');}
-    fileInput.addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;status.textContent='Loading '+f.name+'...';const t=await f.text(),r=parseCSV(t);if(r.length<2){status.textContent='Invalid CSV';return;}renderTable(r);status.textContent='Loaded '+(r.length-1)+' rows.';});
-    document.getElementById('clearBtn').onclick=()=>{thead.innerHTML='';tbody.innerHTML='';table.classList.add('hidden');fileInput.value='';status.textContent='';};
-    document.getElementById('exportBtn').onclick=()=>{const h=[...thead.querySelectorAll('th')].map(x=>x.textContent).join(',');const b=[...tbody.querySelectorAll('tr')].map(tr=>[...tr.querySelectorAll('td')].map(td=>td.textContent).join(',')).join('\n');const blob=new Blob([h+'\n'+b],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='export.csv';a.click();};
-  </script>
-</body>
-</html>
+        <div class="summary-grid">
+          <div class="summary-box">
+            <div class="muted small">Country</div>
+            <div id="sumCountry"><b>-</b></div>
+          </div>
+          <div class="summary-box">
+            <div class="muted small">Address</div>
+            <div id="sumAddress"><b>-</b></div>
+          </div>
+          <div class="summary-box">
+            <div class="muted small">Property Status</div>
+            <div id="propertyStatus"><b>-</b></div>
+          </div>
+          <div class="summary-box">
+            <div class="muted small">Total Usage</div>
+            <div id="totalUsage" class="big">0 m³</div>
+          </div>
+        </div>
+
+        <div id="meterResults"></div>
+
+        <div class="row">
+          <button class="btn-secondary" onclick="toggleDetails()">View Details</button>
+          <button class="btn-primary" onclick="showUpgrade()">Upgrade</button>
+        </div>
+      </div>
+
+      <div id="detailsCard" class="card hidden">
+        <h2>Details</h2>
+        <p class="center muted">Basic details view for all active meters.</p>
+        <div id="detailsContent"></div>
+      </div>
+
+      <div id="upgradeCard" class="card hidden">
+        <h2>Upgrade Options</h2>
+
+        <div class="pricing">
+          <h3>Annual Access</h3>
+          <p><b>Basic:</b> $10 / year</p>
+          <ul>
+            <li>Up to 3 meters</li>
+            <li>Usage calculation</li>
+            <li>Status dots</li>
+            <li>Simple overview</li>
+          </ul>
+        </div>
+
+        <div class="pricing" style="margin-top:12px;">
+          <h3>Upgrade</h3>
+          <p><b>Upgrade:</b> $40 / year</p>
+          <ul>
+            <li>More detailed monitoring</li>
+            <li>History / reports later</li>
+            <li>Extra features</li>
+            <li>Better suspicious activity review</li>
+          </ul>
+        </div>
+
+        <div class="pricing" style="margin-top:12px;">
+          <
